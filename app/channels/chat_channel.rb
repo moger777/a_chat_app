@@ -1,5 +1,6 @@
-# Be sure to restart your server when you modify this file. Action Cable runs in a loop that does not support auto reloading.
 class ChatChannel < ApplicationCable::Channel
+  include ERB::Util
+
   STREAMED_FROM = "chat"
 
   def subscribed
@@ -7,9 +8,9 @@ class ChatChannel < ApplicationCable::Channel
   end
 
   def send_chat(data)
-    message = "#{username} at #{Time.now}: #{data["message"]}"
-
+    sanitized_message = h(data["message"])
+    summarized_message = "#{username} at #{Time.now}: #{sanitized_message}"
     ActionCable.server.broadcast STREAMED_FROM,
-      message: message
+      message: summarized_message
   end
 end
