@@ -6,12 +6,9 @@ App.chat = App.cable.subscriptions.create "ChatChannel",
       message = $('input[name="message"]').val()
       @perform('send_chat', message: message)
 
-  disconnected: ->
-    $(document).off ".chat"
+  disconnected: -> $(document).off ".chat"
 
   received: (data) ->
-    html = """
-      <p>#{data.message}</p>
-    """
+    html = "<p>#{data.message}</p>"
 
     $('.message-container').append(html)
